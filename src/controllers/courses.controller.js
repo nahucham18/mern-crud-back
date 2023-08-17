@@ -35,3 +35,9 @@ export const postCourse = async(req,res)=>{
     res.json(savedCourse)
 
 }
+
+export const getCourseById = async (req,res)=>{
+    const {id} = req.params;
+    const searchCourse = await Course.findById(id)
+    res.json(searchCourse)
+}

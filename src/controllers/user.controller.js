@@ -42,6 +42,23 @@ export const getUserById = async (req, res) => {
     }
 }
 
+export const getUserForCourse = async (req,res)=>{
+    const {courseID} = req.query
+
+    try {
+        const course = await Courses.findById(courseID)
+        console.log(course)
+
+         const users = await User.find({courses: course._id})
+
+        res.json(users)
+        
+    } catch (error) {
+        console.log(error)
+    }
+    
+}
+
 export const deteleUser = async (req, res) => {
     try {
         const { id } = req.params;
@@ -61,22 +78,26 @@ export const putUser = async(req,res)=>{
     try {
         const user = await User.findById(id)
         // console.log(user)
+        if(courses){
+            const course = await  Courses.findById(courses);
+            // console.log(course)
 
-        const course = await  Courses.findById(courses);
-        // console.log(course)
+            const category = await Categories.findById(course.category)
+            // console.log(category)
 
-        const category = await Categories.findById(course.category)
-        // console.log(category)
+            const repeatCategory = user.courses.filter((course,index)=>{
+                console.log(course.category.name)
+                console.log(category.name)
+               return course.category.name === category.name
+            })
+    
+            // console.log(repeatCategory)
+            console.log(repeatCategory.length)
+            if(repeatCategory.length >= 3) return res.json('No puede tener mas de 3 cursos con la misma categoria')
+        }
 
-        const repeatCategory = user.courses.filter((course,index)=>{
-            console.log(course.category.name)
-            console.log(category.name)
-           return course.category.name === category.name
-        })
 
-        // console.log(repeatCategory)
-        console.log(repeatCategory.length)
-        if(repeatCategory.length >= 3) return res.json('No puede tener mas de 3 cursos con la misma categoria')
+        
 
         const updateUser = await User.findByIdAndUpdate(id,
             {
