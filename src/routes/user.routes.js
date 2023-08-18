@@ -38,10 +38,6 @@ const router = Router()
  *              age: 27
  *              gender: hombre
  */
-
-
-
-
 router.get('/bycourse/', getUserForCourse)
 
 /**
@@ -58,9 +54,8 @@ router.get('/bycourse/', getUserForCourse)
  *                      schema:
  *                          type: array
  *                          items: 
- *                              $ref: '#/components/schemas//User'
+ *                              $ref: '#/components/schemas/User'
  */
-
 router.get('/', getAllUsers);
 
 /**
@@ -69,19 +64,86 @@ router.get('/', getAllUsers);
  *  post:
  *      summary: Crea un usuario
  *      tags: [User]
+ *      requestBody:
+ *          required: true
+ *          content:
+ *              applicacion/json:
+ *                  schema:
+ *                      type: object
+ *                      $ref: '#/components/schemas/User'
  *      responses:
  *          200:
- *              description: Muestra todo los usarios
- *              content:
- *                  application/json:
- *                      schema:
- *                          type: array
- *                          items: 
- *                              $ref: '#/components/schemas//User'
+ *              description: Nuevo usuario creado
  */
 router.post('/', postUser);
+
+/**
+ * @swagger
+ *  /api/user/{id}:
+ *  get:
+ *      summary: Busca usuario por id
+ *      tags: [User]
+ *      parameters:
+ *          - in: path
+ *            name: id
+ *            required: true
+ *            schema:
+ *              type: string
+ *            description: ID del usuario a actualizar
+ *      responses:
+ *          200:
+ *              description: usuario encontrado
+ */
 router.get('/:id', getUserById);
+
+/**
+ * @swagger
+ *  /api/user/{id}:
+ *  delete:
+ *      summary: Elimina usuario por id
+ *      tags: [User]
+ *      parameters:
+ *          - in: path
+ *            name: id
+ *            required: true
+ *            schema:
+ *              type: string
+ *            description: ID del usuario a eleminar
+ *      responses:
+ *          200:
+ *              description: Usuario borrado
+ */
 router.delete('/:id', deteleUser);
+
+/**
+ * @swagger
+ *  /api/user/{id}:
+ *  put:
+ *      summary: Actualiza un usuario
+ *      tags: [User]
+ *      parameters:
+ *          - in: path
+ *            name: id
+ *            required: true
+ *            schema:
+ *              type: string
+ *            description: ID del usuario a actualizar
+ *      requestBody:
+ *          required: true
+ *          content:
+ *              application/json:
+ *                  schema:
+ *                      type: object
+ *                      properties:
+ *                          _id:
+ *                              type: string
+ *                              description: id del usuario
+ *      responses:
+ *          200:
+ *              description: El usuario fue actualizado
+ *          302: 
+ *              description: No fue actualizado
+ */
 router.put('/:id', putUser);
 
 export default router;
