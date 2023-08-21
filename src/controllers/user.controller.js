@@ -1,6 +1,8 @@
 import User from '../models/user.model.js';
 import Courses from '../models/course.model.js';
 import Categories from '../models/category.model.js';
+import { userValidationPost } from './validations/user/user.validationPost.js';
+import { userValidationPut } from './validations/user/user.validationPut.js';
 
 export const getAllUsers = async (req, res) => {
     try {
@@ -9,11 +11,15 @@ export const getAllUsers = async (req, res) => {
     } catch (error) {
         console.log(error)
     }
-
 }
 
 export const postUser = async (req, res) => {
     const { first_name, last_name, age, gender, dni } = req.body;
+
+    const validation = await userValidationPost(first_name, last_name, dni, age, gender)
+
+    if (!validation.success) return res.status(400).json({ message: validation.message })
+
     try {
         const newUser = new User(
             {
@@ -26,7 +32,7 @@ export const postUser = async (req, res) => {
         )
 
         const userSaved = await newUser.save()
-        res.json(userSaved);
+        res.status(200).json({ message: "Nuevo usuario creado", data: userSaved });
     } catch (error) {
         res.json({ message: error })
     }
@@ -35,85 +41,103 @@ export const postUser = async (req, res) => {
 export const getUserById = async (req, res) => {
     try {
         const { id } = req.params
+
+        console.log({ id: id })
         const user = await User.findById(id);
+
+        if (user === null) return res.status(400).json({ message: "Usuario no encontrado" })
+        // if(!user) {
+        //     return res.status(404).json({message:" Usuario no encontrado"});
+        // }
+
         res.json(user)
     } catch (error) {
-        console.log(error)
+        res.status(400).json({ message: "Usuario no encontrado" })
     }
 }
 
-export const getUserForCourse = async (req,res)=>{
-    const {courseID} = req.query
+export const getUserForCourse = async (req, res) => {
+    const { courseID } = req.query
 
     try {
         const course = await Courses.findById(courseID)
         console.log(course)
 
-         const users = await User.find({courses: course._id})
+        const users = await User.find({ courses: course._id })
 
         res.json(users)
-        
+
     } catch (error) {
-        console.log(error)
+        res.status(400).json({ message: "Curso no encontrado" })
     }
-    
+
 }
 
 export const deteleUser = async (req, res) => {
     try {
         const { id } = req.params;
         const user = await User.findByIdAndDelete(id);
-        res.json(user);     
+        res.status(200).json({ message: "Usuario eliminado", data: user });
     } catch (error) {
-        console.log(error)
+        res.status(400).json({ message: "Usuario no encontrado" })
     }
 }
 
-export const putUser = async(req,res)=>{
-    const {id} = req.params;
-    const {first_name,last_name, dni, gender, age, courses} = req.body
-
-
-
+export const putUser = async (req, res) => {
     try {
+        const { id } = req.params;
+        console.log({id: id})
         const user = await User.findById(id)
+        
+        const { first_name, last_name, dni, gender, age, courses } = req.body
+        
+        const validation = await userValidationPut(id, first_name, last_name, dni, gender, age, courses)
+        
+        console.log('sali de validation')
+        if (!validation.success) return res.status(400).json({ message: validation.message })
         // console.log(user)
-        if(courses){
-            const course = await  Courses.findById(courses);
-            // console.log(course)
+        if (courses) {
+            const course = await Courses.findById(courses);
+            console.log(course)
 
             const category = await Categories.findById(course.category)
             // console.log(category)
+            const repeatCourseUser = user.courses.filter((cour,index)=>{
+                return (cour.category.name === category.name) && (cour.name === course.name)
+            })
 
-            const repeatCategory = user.courses.filter((course,index)=>{
+            if(repeatCourseUser.length > 0) return res.status(400).json({message:'El usuario ya pertenece a ese curso'})
+
+            const repeatCategory = user.courses.filter((course, index) => {
                 console.log(course.category.name)
                 console.log(category.name)
-               return course.category.name === category.name
+                return course.category.name === category.name
             })
-    
+
             // console.log(repeatCategory)
             console.log(repeatCategory.length)
-            if(repeatCategory.length >= 3) return res.json('No puede tener mas de 3 cursos con la misma categoria')
+            if (repeatCategory.length >= 3) return res.status(400).json({message:'No puede tener mas de 3 cursos con la misma categoria'})
         }
 
 
-        
+
 
         const updateUser = await User.findByIdAndUpdate(id,
             {
-              $set:{
-                first_name,
-                last_name,
-                dni,
-                gender,
-                age,
-              },
-              $addToSet:{courses: courses},
+                $set: {
+                    first_name,
+                    last_name,
+                    dni,
+                    gender,
+                    age,
+                },
+                $addToSet: { courses: courses },
             },
-            {new: true});
-            
-            res.json(updateUser)
+            { new: true });
+
+        res.status(200).json({message: `Se actualizaron los datos`,data:updateUser})
     } catch (error) {
-        console.log(error)
+        
+        res.status(410).json({error:error})
     }
 }

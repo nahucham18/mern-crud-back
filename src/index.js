@@ -3,6 +3,10 @@ import connectDB from './db.js';
 import dotenv from 'dotenv';
 dotenv.config();
 
+//swagger
+import swaggerUI from 'swagger-ui-express';
+import swaggerJsDoc from 'swagger-jsdoc';
+
 connectDB();
 const PORT = process.env.PORT || 3001
 
