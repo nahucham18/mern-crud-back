@@ -15,7 +15,7 @@ import { fileURLToPath } from 'url';
 //path
 import path from 'path';
 
-const CSS_URL = "https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.1.0/swagger-ui.min.css";
+// const CSS_URL = "https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.1.0/swagger-ui.min.css";
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
@@ -31,11 +31,11 @@ const swaggerSpec = {
         },
         servers: [
             {
-                url: process.env.API_BASE_URL || "http://localhost:3001/"
+                url: process.env.API_BASE_URL || "http://localhost:3001"
             },  
         ]
     },
-    apis: [`${path.join(__dirname, "./routes/*.js")}`],
+    apis: ['./src/routes/*.routes.js'],
 }
 
 const app = express();
@@ -46,7 +46,7 @@ app.use(cors())
 app.use(express.json())
 
 app.use("/api", routes);
-app.use("/api-doc", swaggerUi.serve, swaggerUi.setup(swaggerJSDoc(swaggerSpec),{ customCssUrl: CSS_URL }))
+app.use("/api-doc", swaggerUi.serve, swaggerUi.setup(swaggerJSDoc(swaggerSpec)))
 
 
 export default app;
