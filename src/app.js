@@ -27,7 +27,7 @@ const swaggerSpec = {
         },
         servers: [
             {
-                url: process.env.PORT || 'http://localhost:3001'
+                url: 'https://mern-crud-back-9v77lpqer-nahucham18.vercel.app' 
             },  
         ]
     },
