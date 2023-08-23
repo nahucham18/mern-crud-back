@@ -13,6 +13,10 @@
         "dest": "index.js" 
       },
       {
+        "src": "/api-doc/(.*)",
+        "dest": "index.js" 
+      },
+      {
         "src": "/(.*)",
         "dest": "/" 
       }
