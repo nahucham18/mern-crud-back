@@ -8,7 +8,7 @@ import cors from 'cors';
 
 //swagger  
 import swaggerUi from 'swagger-ui-express';
-import swaggerJsDoc from 'swagger-jsdoc';
+import swaggerJSDoc from 'swagger-jsdoc';
 
 import { fileURLToPath } from 'url';
 
@@ -43,7 +43,7 @@ app.use(cors())
 app.use(express.json())
 
 app.use("/api", routes);
-app.use("/api-doc", swaggerUi.serve, swaggerUi.setup(swaggerJsDoc(swaggerSpec)))
+app.use("/api-doc", swaggerUi.serve, swaggerUi.setup(swaggerJSDoc(swaggerSpec)))
 
 
 export default app;
