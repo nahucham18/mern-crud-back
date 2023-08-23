@@ -13,7 +13,7 @@
         "dest": "index.js" 
       },
       {
-        "src": "/swagger/(.*)",
+        "src": "/api/api-doc/(.*)",
         "dest": "index.js"
       },
       {
