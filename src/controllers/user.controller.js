@@ -14,6 +14,7 @@ export const getAllUsers = async (req, res) => {
 }
 
 export const postUser = async (req, res) => {
+    console.log({bodyy:req.body})
     const { first_name, last_name, age, gender, dni } = req.body;
 
     const validation = await userValidationPost(first_name, last_name, dni, age, gender)
@@ -96,7 +97,9 @@ export const putUser = async (req, res) => {
         console.log('sali de validation')
         if (!validation.success) return res.status(400).json({ message: validation.message })
         // console.log(user)
+    
         if (courses) {
+            console.log('entre')    
             const course = await Courses.findById(courses);
             console.log(course)
 
@@ -119,18 +122,28 @@ export const putUser = async (req, res) => {
             if (repeatCategory.length >= 3) return res.status(400).json({message:'No puede tener mas de 3 cursos con la misma categoria'})
         }
 
+        console.log('entre2 ')
+        const udpadteObject = {}
 
-
-
+        if(first_name !== undefined && first_name !== ""){
+            udpadteObject.first_name = first_name
+        }
+        if(last_name !== undefined && last_name !== ""){
+            udpadteObject.last_name = last_name
+        }
+        if( dni !== undefined && dni !== ""){
+            udpadteObject.dni = dni
+        }
+        if(gender !== undefined && gender !== ""){
+            udpadteObject.gender = gender
+        }
+        if(age !== undefined && age !== ""){
+            udpadteObject.age = age
+        }
+        console.log('entre3')
         const updateUser = await User.findByIdAndUpdate(id,
             {
-                $set: {
-                    first_name,
-                    last_name,
-                    dni,
-                    gender,
-                    age,
-                },
+                $set: udpadteObject,
                 $addToSet: { courses: courses },
             },
             { new: true });

@@ -10,12 +10,16 @@ const courseSchema = new Schema(
         },
         description: {
             type: String,
-            required: true, 
+            required: true,
         },
-        category:{
+        category: {
             type: mongoose.Types.ObjectId,
             ref: 'Categories',
             autopopulate: true,
+        },
+        img_course: {
+            type: String,
+            default: "https://firebasestorage.googleapis.com/v0/b/nahuelchamorro-e4019.appspot.com/o/cursoonline.png?alt=media&token=82c098f1-ba88-4743-b2e0-33b0f1f51d28"
         }
 
     },

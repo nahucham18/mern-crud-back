@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import {getAllCategory, postCategory, getByIdCategory, deleteCategory} from '../controllers/category.controller.js';
+import { getAllCategory, postCategory, getByIdCategory, deleteCategory, putCategory } from '../controllers/category.controller.js';
 
 
 const router = Router();
@@ -11,20 +11,32 @@ const router = Router();
  *          Category:
  *              type: object
  *              properties:
+ *                  _id:
+ *                      type: string
+ *                      description: ID de la categoría
  *                  name:
  *                      type: string
- *                      description: Nombre de la categoria
+ *                      description: Nombre de la categoría
+ *                  __v:
+ *                      type: integer
+ *                      description: Versión del documento
  *              required:
  *                  - name
  *              example:
- *                  name: Frontend
+ *              -   _id: "64e1626f15d17fc0b4b39538"
+ *                  name: "idioma"
+ *                  __v: 0
+ *              -   _id: "64e1626f15d17fc0b4b12345"
+ *                  name: "backend"
+ *                  __v: 0
  */
 
+/**
 /**
  * @swagger
  * /api/category:
  *  get:
- *      summary: Muestra toda las categorias
+ *      summary: Muestra todas las categorías
  *      tags: [Category]
  *      responses:
  *          200:
@@ -32,9 +44,7 @@ const router = Router();
  *              content:
  *                  application/json:
  *                      schema:
- *                          type: array
- *                          items:
- *                              $ref: '#/components/schemas/Category'
+ *                          $ref: '#/components/schemas/Category'
  */
 router.get('/', getAllCategory);
 
@@ -50,7 +60,12 @@ router.get('/', getAllCategory);
  *              application/json:
  *                  schema:
  *                      type: object
- *                      $ref: '#/components/schemas/Category'          
+ *                      properties:
+ *                          name:
+ *                              type: string    
+ *                              description: "Nombre de la categoria"  
+ *                      example:
+ *                          name: Diseño    
  *      responses:
  *          200:
  *              description: Nueva categoria creada
@@ -75,7 +90,7 @@ router.get('/', getAllCategory);
  *                              message: Nueva categoria creada
  *                              data:
  *                                  _id: 64dfd34f3e57293218f499b9
- *                                  name: backend
+ *                                  name: backend   
  */
 router.post('/', postCategory);
 
@@ -95,6 +110,25 @@ router.post('/', postCategory);
  *      responses:
  *          200:
  *              description: Categoria encontrada
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          type: object
+ *                          properties:
+ *                              _id: 
+ *                                  type: string
+ *                                  description: ID de la categoria
+ *                              name:
+ *                                  type: string
+ *                                  description: Nombre de la categoria
+ *                              __v:
+ *                                  type: number
+ *                                  description: Numero de version
+ *                          example:
+ *                              _id: 64dfd34f3e57293218f499b9
+ *                              name: backend
+ *                              __v: 0
+ * 
  */
 router.get('/:id', getByIdCategory);
 
@@ -114,8 +148,94 @@ router.get('/:id', getByIdCategory);
  *      responses:
  *          200:
  *              description: Categoria eliminada
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          type: object
+ *                          properties:
+ *                              message:
+ *                                  type: string
+ *                                  description: Mensaje de respuesta
+ *                              data:
+ *                                  type: object
+ *                                  properties:
+ *                                      _id:
+ *                                          type: string
+ *                                          description: ID de categoria
+ *                                      name:
+ *                                          type: string
+ *                                          description: Nombre de la categoria
+ *                                      __v: 
+ *                                          type: number
+ *                                          description: Numero de la version
+ *                          example:
+ *                              message: La categoria fue eliminada
+ *                              data:
+ *                                  _id: 64dfd34f3e57293218f499b9
+ *                                  name: backend
+ *                                  __v: 0                 
+ *                                              
  */
 router.delete('/:id', deleteCategory);
-// router.put('/:id', putCategory);
+
+
+/**
+ * @swagger
+ *  /api/category/{id}:
+ *  put:
+ *      summary: Actualiza una categoria
+ *      tags: [Category]
+ *      parameters:
+ *          - in: path
+ *            name: id
+ *            required: true
+ *            schema:
+ *              type: string
+ *            description: ID de la categoria a actualizar
+ *      requestBody:
+ *          required: true
+ *          content:
+ *              application/json:
+ *                  schema:
+ *                      type: object
+ *                      properties:
+ *                          name:
+ *                              type: string
+ *                              description: Nuevo nombre de la categoria
+ *                      example:
+ *                          name: Desarrollo
+ *      responses:
+ *          200:
+ *              description: El usuario fue actualizado
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          type: object
+ *                          properties:
+ *                              message:
+ *                                  type: string
+ *                                  description: mensaje de respuesta
+ *                              data:
+ *                                  type: object
+ *                                  properties:
+ *                                      _id:
+ *                                          type: string
+ *                                          description: ID de la categoria
+ *                                      name:
+ *                                          type: string
+ *                                          description: Nombre de la categoria
+ *                                      __v: 
+ *                                          type: number
+ *                                          description: Numero de version
+ *                          example:
+ *                              message: Categoria actualizada
+ *                              data:
+ *                                  _id: "64e1626f15d17fc0b4b39538"
+ *                                  name: idioma
+ *                                  __V: 0
+ *          302: 
+ *              description: No fue actualizado
+ */
+router.put('/:id', putCategory);
 
 export default router;

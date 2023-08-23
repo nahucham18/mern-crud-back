@@ -19,11 +19,11 @@ export const userValidationPost = async (first_name, last_name, dni, age, gender
 
     const searchDni = await User.find({dni:dni})
     console.log(searchDni)
-    if(searchDni.length > 0) return {success:false, message: 'El dni ya existe'}
+    if(searchDni.length > 0) return {success:false, message: 'El DNI ya existe'}
         
     console.log(toString(dni))
-    if(typeof(dni) !== 'number') return{ success:false, message: 'Tiene que ser un numero'}
-    if(dni.toString().length !== 8) return { success:false, message: "El dni tiene que tener 8 caracteres"}
+    if(typeof(dni) !== 'number') return{ success:false, message: 'El DNI tiene que ser un numero'}
+    if(dni.toString().length !== 8) return { success:false, message: "El DNI tiene que tener 8 caracteres"}
 
     if(age < 10 || age > 110) return { success:false, message: "No se puede crear usuario con esa edad"}
 
