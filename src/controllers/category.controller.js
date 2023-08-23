@@ -6,7 +6,7 @@ export const getAllCategory = async (req, res) => {
     res.json(categories)
 }
 
-
+//controlador para crear usuario
 export const postCategory = async (req, res) => {
     const { name } = req.body;
 
