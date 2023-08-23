@@ -38,6 +38,7 @@ const swaggerSpec = {
     apis: ['./routes/*.js'],
 }
 
+//express
 const app = express();
 
 app.use(morgan('dev'));
