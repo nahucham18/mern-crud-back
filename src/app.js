@@ -24,7 +24,7 @@ const swaggerSpec = {
         },
         servers: [
             {
-                url: "http://localhost:3001"
+                url: "https://mern-crud-back-silk.vercel.app"
             }
         ]
     },
