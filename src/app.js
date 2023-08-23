@@ -4,7 +4,7 @@ import express from 'express';
 import morgan from 'morgan';
 import routes from './routes/index.routes.js';
 import cors from 'cors';
-
+import bodyParser from 'body-parser';
 
 //swagger  
 import swaggerUi from 'swagger-ui-express';
@@ -29,24 +29,24 @@ const swaggerSpec = {
             title: "Examen-Tecnico",
             version: "1.0.0",
         },
-        // servers: [
-        //     {
-        //         url: process.env.API_BASE_URL || "http://localhost:3001/"
-        //     },  
-        // ]
+        servers: [
+            {
+                url: process.env.API_BASE_URL || "http://localhost:3001/"
+            },  
+        ]
     },
-    apis: ['./routes/*.js'],
+    apis: [`${path.join(__dirname, "./routes/*.js")}`],
 }
 
-//express
 const app = express();
 
 app.use(morgan('dev'));
+app.use(bodyParser.json())
 app.use(cors())
 app.use(express.json())
 
 app.use("/api", routes);
-app.use("/api-doc", swaggerUi.serve, swaggerUi.setup(swaggerJSDoc(swaggerSpec)))
+app.use("/api-doc", swaggerUi.serve, swaggerUi.setup(swaggerJSDoc(swaggerSpec),{ customCssUrl: CSS_URL }))
 
 
 export default app;
