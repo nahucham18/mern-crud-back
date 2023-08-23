@@ -13,7 +13,7 @@
         "dest": "index.js" 
       },
       {
-        "src": "/api/api-doc/(.*)",
+        "src": "/api-doc/(.*)",
         "dest": "index.js"
       },
       {
