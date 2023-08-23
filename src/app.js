@@ -1,7 +1,10 @@
+import dotenv from 'dotenv';
+dotenv.config();
 import express from 'express';
 import morgan from 'morgan';
 import routes from './routes/index.routes.js';
 import cors from 'cors';
+
 
 //swagger  
 import swaggerUi from 'swagger-ui-express';
@@ -24,8 +27,8 @@ const swaggerSpec = {
         },
         servers: [
             {
-                url: "https://mern-crud-back-silk.vercel.app"
-            }
+                url: process.env.PORT || 'http://localhost:3001'
+            },  
         ]
     },
     apis: [`${path.join(__dirname, "./routes/*.js")}`],
