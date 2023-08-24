@@ -8,7 +8,7 @@ export const getAllCourses = async (req, res) => {
 
 export const postCourse = async (req, res) => {
     try {
-        const { name, description, categoryID } = req.body;
+        const { name , description, categoryID } = req.body;
         console.log(categoryID)
 
         if (!name || !description || !categoryID) return res.status(400).json({ message: 'Faltan datos' })
