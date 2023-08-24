@@ -11,6 +11,7 @@ export const postCourse = async (req, res) => {
         const { name , description, categoryID } = req.body;
         console.log(categoryID)
 
+        //validacion de datos no encontrados
         if (!name || !description || !categoryID) return res.status(400).json({ message: 'Faltan datos' })
 
         try {
