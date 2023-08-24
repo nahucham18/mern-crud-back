@@ -103,7 +103,8 @@ export const putUser = async (req, res) => {
             const course = await Courses.findById(courses);
             console.log(course)
 
-            const category = await Categories.findById(course.category)
+            if(course?.category === null)return res.status(400).json({message: "Este curso no tiene categoria"})
+            const category = await Categories.findById(course?.category)
             // console.log(category)
             const repeatCourseUser = user.courses.filter((cour,index)=>{
                 return (cour.category.name === category.name) && (cour.name === course.name)
