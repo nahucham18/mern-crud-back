@@ -1,4 +1,6 @@
 {
+    "name": "mi-proyecto",
+    "version": 2,
     "builds": [
       {
         "src": "index.js",
@@ -11,12 +13,16 @@
         "dest": "index.js" 
       },
       {
-        "src": "/api-doc/(.*)",
+        "src": "/public/(.*)",
+        "dest": "public/$1"
+      },
+      {
+        "src": ".src/api-doc/(.*)",
         "dest": "index.js"
       },
       {
         "src": "/(.*)",
-        "dest": "/public/$1" 
+        "dest": "/" 
       }
     ]
   }
