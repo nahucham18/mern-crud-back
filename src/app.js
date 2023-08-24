@@ -8,7 +8,7 @@ import bodyParser from 'body-parser';
 
 //swagger  
 import swaggerUi from 'swagger-ui-express';
-import swaggerJSDoc from 'swagger-jsdoc';
+import swaggerJsDoc from 'swagger-jsdoc';
 
 import { fileURLToPath } from 'url';
 
@@ -31,11 +31,16 @@ const swaggerSpec = {
         },
         servers: [
             {
-                url: process.env.API_BASE_URL || "http://localhost:3001"
-            },  
+                url: process.env.API_BASE_URL
+            },
+            {
+                url: 'http://localhost:3001'
+            },
         ]
     },
-    apis: ['./src/routes/*.routes.js'],
+    apis: [
+        "./src/routes/*.routes.js",
+    ],
 }
 
 const app = express();
@@ -46,7 +51,14 @@ app.use(cors())
 app.use(express.json())
 
 app.use("/api", routes);
-app.use("/api-doc", swaggerUi.serve, swaggerUi.setup(swaggerJSDoc(swaggerSpec)))
+app.use("/api-doc", swaggerUi.serve, swaggerUi.setup(swaggerJsDoc(swaggerSpec)))
 
+app.get("/api-docs.json", (req, res) => {
+    res.setHeader("Content-Type", "application/json");
+    res.send(swaggerJsDoc(swaggerSpec));
+  });
+  console.log(
+    `Version 1 Docs are available on http://localhost:3001/api-docs`
+  );
 
 export default app;
