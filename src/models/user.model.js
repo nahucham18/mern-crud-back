@@ -1,8 +1,7 @@
 import mongoose from 'mongoose';
 import autopopulate from 'mongoose-autopopulate';
-//Para las personas se pide registrar su nombre y apellido, DNI, género y edad.
 
-
+//MODELO User
 const userSchema = new mongoose.Schema({
     first_name: {
         type:String,

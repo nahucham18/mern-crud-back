@@ -15,8 +15,6 @@ import { fileURLToPath } from 'url';
 //path
 import path from 'path';
 
-// const CSS_URL = "https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.1.0/swagger-ui.min.css";
-
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 

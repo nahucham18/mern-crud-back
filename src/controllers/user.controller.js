@@ -14,7 +14,7 @@ export const getAllUsers = async (req, res) => {
 }
 
 export const postUser = async (req, res) => {
-    console.log({bodyy:req.body})
+    console.log({ bodyy: req.body })
     const { first_name, last_name, age, gender, dni } = req.body;
 
     const validation = await userValidationPost(first_name, last_name, dni, age, gender)
@@ -42,15 +42,8 @@ export const postUser = async (req, res) => {
 export const getUserById = async (req, res) => {
     try {
         const { id } = req.params
-
-        console.log({ id: id })
         const user = await User.findById(id);
-
         if (user === null) return res.status(400).json({ message: "Usuario no encontrado" })
-        // if(!user) {
-        //     return res.status(404).json({message:" Usuario no encontrado"});
-        // }
-
         res.json(user)
     } catch (error) {
         res.status(400).json({ message: "Usuario no encontrado" })
@@ -59,19 +52,13 @@ export const getUserById = async (req, res) => {
 
 export const getUserForCourse = async (req, res) => {
     const { courseID } = req.query
-
     try {
         const course = await Courses.findById(courseID)
-        console.log(course)
-
         const users = await User.find({ courses: course._id })
-
         res.json(users)
-
     } catch (error) {
         res.status(400).json({ message: "Curso no encontrado" })
     }
-
 }
 
 export const deteleUser = async (req, res) => {
@@ -87,61 +74,47 @@ export const deteleUser = async (req, res) => {
 export const putUser = async (req, res) => {
     try {
         const { id } = req.params;
-        console.log({id: id})
         const user = await User.findById(id)
-        
         const { first_name, last_name, dni, gender, age, courses } = req.body
-        
         const validation = await userValidationPut(id, first_name, last_name, dni, gender, age, courses)
-        
-        console.log('sali de validation')
-        if (!validation.success) return res.status(400).json({ message: validation.message })
-        // console.log(user)
-    
-        if (courses) {
-            console.log('entre')    
-            const course = await Courses.findById(courses);
-            console.log(course)
 
-            if(course?.category === null)return res.status(400).json({message: "Este curso no tiene categoria"})
+        if (!validation.success) return res.status(400).json({ message: validation.message })
+
+        if (courses) {
+            const course = await Courses.findById(courses);
+            if (course?.category === null) return res.status(400).json({ message: "Este curso no tiene categoria" })
+
             const category = await Categories.findById(course?.category)
-            // console.log(category)
-            const repeatCourseUser = user.courses.filter((cour,index)=>{
+            const repeatCourseUser = user.courses.filter((cour, index) => {
                 return (cour.category.name === category.name) && (cour.name === course.name)
             })
 
-            if(repeatCourseUser.length > 0) return res.status(400).json({message:'El usuario ya pertenece a ese curso'})
+            if (repeatCourseUser.length > 0) return res.status(400).json({ message: 'El usuario ya pertenece a ese curso' })
 
             const repeatCategory = user.courses.filter((course, index) => {
-                console.log(course.category.name)
-                console.log(category.name)
                 return course.category.name === category.name
             })
 
-            // console.log(repeatCategory)
-            console.log(repeatCategory.length)
-            if (repeatCategory.length >= 3) return res.status(400).json({message:'No puede tener mas de 3 cursos con la misma categoria'})
+            if (repeatCategory.length >= 3) return res.status(400).json({ message: 'No puede tener mas de 3 cursos con la misma categoria' })
         }
 
-        console.log('entre2 ')
         const udpadteObject = {}
-
-        if(first_name !== undefined && first_name !== ""){
+        if (first_name !== undefined && first_name !== "") {
             udpadteObject.first_name = first_name
         }
-        if(last_name !== undefined && last_name !== ""){
+        if (last_name !== undefined && last_name !== "") {
             udpadteObject.last_name = last_name
         }
-        if( dni !== undefined && dni !== ""){
+        if (dni !== undefined && dni !== "") {
             udpadteObject.dni = dni
         }
-        if(gender !== undefined && gender !== ""){
+        if (gender !== undefined && gender !== "") {
             udpadteObject.gender = gender
         }
-        if(age !== undefined && age !== ""){
+        if (age !== undefined && age !== "") {
             udpadteObject.age = age
         }
-        console.log('entre3')
+    
         const updateUser = await User.findByIdAndUpdate(id,
             {
                 $set: udpadteObject,
@@ -149,9 +122,8 @@ export const putUser = async (req, res) => {
             },
             { new: true });
 
-        res.status(200).json({message: `Se actualizaron los datos`,data:updateUser})
+        res.status(200).json({ message: `Se actualizaron los datos`, data: updateUser })
     } catch (error) {
-        
-        res.status(410).json({error:error})
+        res.status(410).json({ error: error })
     }
 }

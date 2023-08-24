@@ -6,16 +6,13 @@ export const getAllCategory = async (req, res) => {
     res.json(categories)
 }
 
-//controlador para crear usuario
 export const postCategory = async (req, res) => {
     const { name } = req.body;
 
     if (!name) return res.json('Faltan datos');
 
     const newName = name;
-    console.log(newName);
     const lowerName = newName.toLowerCase()
-    console.log(lowerName)
     const searchCategory = await Category.find({ name: lowerName });
 
     if (searchCategory.length > 0) return res.status(400).json({ message: 'Ya existe esta categoria' })
@@ -35,10 +32,9 @@ export const postCategory = async (req, res) => {
 
 export const getByIdCategory = async (req, res) => {
     const { id } = req.params;
-    console.log(id)
+
     try {
         const searchCategory = await Category.findById(id);
-        console.log(searchCategory)
         if (searchCategory === null) {
             return res.status(400).json('Categoria no encontrado')
         } else {
@@ -54,7 +50,6 @@ export const deleteCategory = async (req, res) => {
     const { id } = req.params;
     try {
         const searchCategory = await Category.findByIdAndDelete(id)
-        console.log(searchCategory)
         if (searchCategory === null) {
             return res.status(400).json({ message: 'Categoria no encontrada' })
         } else {
@@ -73,7 +68,6 @@ export const putCategory = async (req, res) => {
 
         if(name !== undefined && name !== ""){  
             const searchNameCategory = await Category.find({name:name})
-            console.log(searchNameCategory)
 
             if(searchNameCategory.length > 0 && searchNameCategory[0]?._id.toString() !== id){
                 res.status(400).json({message: 'Ya existe categoria con ese nombre'})
@@ -95,55 +89,4 @@ export const putCategory = async (req, res) => {
     } catch (error) {
         res.status(400).json({message: 'No se encontro la categoria'})
     }
-
-
-    //     if(!name){
-    //         res.status(400).json({message: 'Nombre no puede estar vacio'})
-    //     }else{
-
-    //     try {
-    //         const searchCategory = await Category.findById(id)
-
-    //         try {
-    //             const copyCategory = await Category.find({ name: name })
-    //             console.log(copyCategory)
-    //             if (copyCategory.length === 0) {
-    //                 const updateCategory = await Category.findByIdAndUpdate(id,
-    //                     {
-    //                         $set: {
-    //                             name,
-    //                         },
-    //                     },
-    //                     { new: true });
-    //                 res.status(200).json({ message: 'Categoria actualizada 1', data: updateCategory })
-    //             } else {
-    //                 if (copyCategory[0]._id.toString() === id) {
-    //                     const updateCategory = await Category.findByIdAndUpdate(id,
-    //                         {
-    //                             $set: {
-    //                                 name,
-    //                             },
-    //                         },
-    //                         { new: true });
-    //                     res.status(200).json({ message: 'Categoria actualizada 2', data: updateCategory })
-    //                 }
-    //                 else{
-    //                     res.status(400).json({ message: 'Ya existe una categoria con ese nombre' })
-    //                 }
-    //             }
-
-    //         } catch (error) {
-    //             const updateCategory = await Category.findByIdAndUpdate(id,
-    //                 {
-    //                     $set: {
-    //                         name,
-    //                     },
-    //                 },
-    //                 { new: true });
-    //             res.status(200).json({ message: 'Categoria actualizada 3', data: updateCategory })
-    //         }
-    //     } catch (error) {
-    //         res.status(400).json({ message: 'Categoria no existe' })
-    //     }
-    // }
 }

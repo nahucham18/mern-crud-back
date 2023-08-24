@@ -2,12 +2,6 @@ import User from '../../../models/user.model.js';
 
 export const userValidationPost = async (first_name, last_name, dni, age, gender) =>{
 
-    console.log(first_name)
-    console.log(last_name)
-    console.log(dni)
-    console.log(age)
-    console.log(gender)
-
     if(!first_name || !last_name || !age || !gender || !dni) return {success:false, message:"Faltan datos"}
 
     const namePattern = /^[^\d]+$/;
@@ -18,10 +12,9 @@ export const userValidationPost = async (first_name, last_name, dni, age, gender
     if(last_name.length > 20) return { success:false ,message: "El apellido no puede tener mas de 20 caracteres"}
 
     const searchDni = await User.find({dni:dni})
-    console.log(searchDni)
+
     if(searchDni.length > 0) return {success:false, message: 'El DNI ya existe'}
         
-    console.log(toString(dni))
     if(typeof(dni) !== 'number') return{ success:false, message: 'El DNI tiene que ser un numero'}
     if(dni.toString().length !== 8) return { success:false, message: "El DNI tiene que tener 8 caracteres"}
 

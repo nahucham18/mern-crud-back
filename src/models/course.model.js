@@ -2,6 +2,7 @@ import mongoose from 'mongoose';
 const Schema = mongoose.Schema
 import autopopulate from 'mongoose-autopopulate';
 
+//MODELO Course
 const courseSchema = new Schema(
     {
         name: {
