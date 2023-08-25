@@ -107,7 +107,7 @@ export const putCourse = async (req, res) => {
                         $set: updateObject
                     },
                     { new: true });
-                res.status(200).json({ message: 'Curso actualizado1', data: updateCourse })
+                res.status(200).json({ message: 'Curso actualizado', data: updateCourse })
             }
         } 
         //Opcion 2: Si solo mandan una categoryID

@@ -12,9 +12,9 @@ export const userValidationPut = async (id, first_name, last_name, dni, gender, 
     if (dni) {   
         try {
             const searchDni = await User.find({ dni: dni })
-            if ((searchDni.length > 0) && (searchDni[0].id !== id)) return { success: false, message: 'El dni ya existe' }
-            if (isNaN(parseInt(dni))) return { success: false, message: 'Tiene que ser un numero' }
-            if (dni.toString().length !== 8) return { success: false, message: "El dni tiene que tener 8 caracteres" }
+            if ((searchDni.length > 0) && (searchDni[0].id !== id)) return { success: false, message: 'El DNI ya existe' }
+            if (isNaN(parseInt(dni))) return { success: false, message: 'El DNI tiene que ser un numero' }
+            if (dni.toString().length !== 8) return { success: false, message: "El DNI tiene que tener 8 caracteres" }
         } catch (error) {
             console.log('nose')
         }
@@ -34,7 +34,7 @@ export const userValidationPut = async (id, first_name, last_name, dni, gender, 
         if (!validGenders[lowerGender]) {
             return {
                 success: false,
-                message: "El género debe ser 'hombre', 'mujer' o 'no binario'"
+                message: "El género debe ser 'hombre' o 'mujer''"
             };
         }
     }
