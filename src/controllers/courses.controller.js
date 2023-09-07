@@ -1,5 +1,6 @@
 import Course from '../models/course.model.js';
 import Category from '../models/category.model.js';
+import User from '../models/user.model.js';
 
 //Controlador para buscar todo los cursos
 export const getAllCourses = async (req, res) => {
@@ -178,5 +179,38 @@ export const putCourse = async (req, res) => {
     }
 }
 
+
+export const desInscribir = async (req, res) =>{
+    const {id} = req.params;
+    const {idUser} = req.body;
+    try {
+        const searchCourse = await Course.findById(id);
+        const searchUser = await User.findById(idUser);
+        // console.log(searchCourse);
+        // console.log(searchUser.courses);
+        
+        const newArray = searchUser.courses.filter(course =>
+            {
+            console.log(course._id.toString())
+            console.log(searchCourse._id.toString())
+            return course._id.toString() !== searchCourse._id.toString();
+        })
+
+        // console.log(newArray);
+
+        const updateCourse = await User.findByIdAndUpdate(idUser,
+            {
+                $set:{
+                    courses: newArray,
+                }
+            },
+            { new: true });
+        // console.log(updateCourse);
+        
+        res.status(200).json({message: "Desinscripcion exitosa"})
+    } catch (error) {
+        res.status(400).json(error)
+    }
+}
 
 

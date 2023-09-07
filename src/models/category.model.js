@@ -8,6 +8,11 @@ const categorySchema = new Schema (
             type: String,
             required: true
         },
+        habilitado:{
+            type: Boolean,
+            required: true,
+            default: true,
+        }
     }
 )
 

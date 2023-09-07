@@ -1,5 +1,5 @@
 import {Router} from 'express';
-import {getAllCourses,postCourse, getCourseById, deleteCourse, putCourse} from '../controllers/courses.controller.js';
+import {getAllCourses,postCourse, getCourseById, deleteCourse, putCourse,desInscribir} from '../controllers/courses.controller.js';
 
 const router = Router();
 
@@ -355,5 +355,7 @@ router.delete('/:id', deleteCourse)
  *              description: No fue actualizado
  */
 router.put('/:id', putCourse)
+
+router.put('/desinscribir/:id', desInscribir)
 
 export default router;

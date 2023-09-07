@@ -176,7 +176,7 @@ router.get('/:id', getByIdCategory);
  *                                  __v: 0                 
  *                                              
  */
-router.delete('/:id', deleteCategory);
+router.put('/delete/:id', deleteCategory);
 
 
 /**

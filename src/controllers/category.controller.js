@@ -21,6 +21,7 @@ export const postCategory = async (req, res) => {
         const newCategory = new Category(
             {
                 name: lowerName,
+                habilitado: true,
             }
         )
         const categorySaved = await newCategory.save();
@@ -46,17 +47,37 @@ export const getByIdCategory = async (req, res) => {
 }
 
 
-export const deleteCategory = async (req, res) => {
-    const { id } = req.params;
+// export const deleteCategory = async (req, res) => {
+//     const { id } = req.params;
+//     try {
+//         const searchCategory = await Category.findByIdAndDelete(id)
+//         if (searchCategory === null) {
+//             return res.status(400).json({ message: 'Categoria no encontrada' })
+//         } else {
+//             return res.status(200).json({ message: 'La categoria fue eliminada', data: searchCategory })
+//         }
+//     } catch (error) {
+//         res.status(400).json({ message: 'Categorina no encontrada' })
+//     }
+// }
+
+export const deleteCategory = async (req, res)=>{
     try {
-        const searchCategory = await Category.findByIdAndDelete(id)
-        if (searchCategory === null) {
-            return res.status(400).json({ message: 'Categoria no encontrada' })
-        } else {
-            return res.status(200).json({ message: 'La categoria fue eliminada', data: searchCategory })
-        }
+        const { id } = req.params 
+        const {habilitado} = req.body
+        console.log(habilitado)
+        const searchCategory = await Category.findById(id)
+
+        const updateCategory = await Category.findByIdAndUpdate(id,{
+            $set:{  
+                habilitado     
+            },
+            },
+            {new: true}
+        )
+        res.status(200).json({message: "Categoria borrada", data: updateCategory})
     } catch (error) {
-        res.status(400).json({ message: 'Categorina no encontrada' })
+        console.log(error)
     }
 }
 
@@ -65,6 +86,7 @@ export const putCategory = async (req, res) => {
         const { id } = req.params
         const { name } = req.body
         const searchCategory = await Category.findById(id)
+        console.log(habilitado)
 
         if(name !== undefined && name !== ""){  
             const searchNameCategory = await Category.find({name:name})
@@ -74,7 +96,7 @@ export const putCategory = async (req, res) => {
             }else{
                 const updateCategory = await Category.findByIdAndUpdate(id,{
                     $set:{
-                        name,       
+                        name,     
                     },
                     },
                     {new: true}
